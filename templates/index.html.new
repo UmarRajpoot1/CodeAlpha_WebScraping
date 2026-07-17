@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Shelfscope — Discover your next book</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #16213E;
+    --navy-deep: #0E1629;
+    --cream: #F7F3E9;
+    --card: #FFFDF8;
+    --gold: #C9A227;
+    --ink: #1F1B16;
+    --ink-soft: #6B655A;
+    --stock-green: #4C7A5B;
+    --line: #E7E0CC;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 36px;
+    background: var(--navy-deep);
+    border-bottom: 1px solid #26325A;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 19px;
+    color: var(--cream);
+  }
+
+  .brand .mark {
+    width: 20px;
+    height: 20px;
+    border: 1.5px solid var(--gold);
+    border-radius: 3px;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .brand .mark::before {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 3px;
+    bottom: 3px;
+    width: 1.5px;
+    background: var(--gold);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+  }
+  .nav-links a {
+    color: #B7B2A0;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+  .nav-links a:hover { color: var(--cream); }
+
+  header {
+    background: var(--navy);
+    background-image: radial-gradient(circle at 12% 15%, rgba(201,162,39,0.10), transparent 45%);
+    color: var(--cream);
+    padding: 46px 36px 34px;
+    border-bottom: 4px solid var(--gold);
+  }
+
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 0 0 12px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    margin: 0 0 10px;
+    font-weight: 700;
+    max-width: 620px;
+  }
+
+  header p.sub {
+    margin: 0 0 24px;
+    color: #C9C2AF;
+    font-size: 15px;
+    max-width: 560px;
+    line-height: 1.5;
+  }
+
+  .stats-row {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+  }
+
+  .stat { font-family: 'IBM Plex Mono', monospace; }
+
+  .stat .num {
+    font-size: 21px;
+    color: var(--gold);
+    font-weight: 500;
+    display: block;
+  }
+
+  .stat .label {
+    font-size: 10.5px;
+    color: #9F9880;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  main {
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 34px 36px 60px;
+  }
+
+  .search-panel {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 22px;
+    margin-bottom: 26px;
+    box-shadow: 0 1px 2px rgba(22,33,62,0.04);
+  }
+
+  .search-row { display: flex; gap: 10px; }
+
+  #queryInput {
+    flex: 1;
+    padding: 13px 16px;
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 15px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: var(--cream);
+    color: var(--ink);
+  }
+  #queryInput:focus { outline: none; border-color: var(--gold); }
+
+  button#searchBtn {
+    background: var(--navy);
+    color: var(--cream);
+    border: none;
+    padding: 0 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+  }
+  button#searchBtn:hover { background: #223058; }
+
+  .examples {
+    margin-top: 15px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .examples span.label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin-right: 4px;
+  }
+
+  .chip {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    background: var(--cream);
+    border: 1px solid var(--line);
+    color: var(--ink-soft);
+    padding: 6px 12px;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+  .chip:hover { border-color: var(--gold); color: var(--ink); }
+
+  .results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 16px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+  }
+  .results-header b { color: var(--navy); }
+
+  .empty-note {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--ink-soft);
+    border: 1px dashed var(--line);
+    padding: 32px;
+    text-align: center;
+    border-radius: 6px;
+  }
+
+  .catalog {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 14px 14px 16px;
+    animation: fadeUp 0.3s ease;
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
+  }
+  .card:hover {
+    box-shadow: 0 4px 14px rgba(22,33,62,0.08);
+    transform: translateY(-2px);
+  }
+
+  .card .thumb {
+    width: 100%;
+    height: 130px;
+    object-fit: contain;
+    background: #F1ECDD;
+    border-radius: 3px;
+    margin-bottom: 10px;
+  }
+
+  .card .title {
+    font-size: 13.5px;
+    line-height: 1.35;
+    margin: 0 0 8px;
+    font-weight: 600;
+    min-height: 38px;
+  }
+
+  .card .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+  }
+
+  .card .price { color: var(--navy); font-weight: 600; }
+  .card .rating { color: var(--gold); letter-spacing: 1px; }
+
+  .card .stock {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    color: var(--stock-green);
+    margin-top: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 30px 36px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  footer .foot-brand {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--navy);
+  }
+
+  footer .foot-links {
+    display: flex;
+    gap: 22px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+  }
+  footer .foot-links a { color: var(--ink-soft); text-decoration: none; }
+  footer .foot-links a:hover { color: var(--ink); }
+
+  footer .copyright {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    color: #A79F8A;
+    width: 100%;
+    margin-top: 6px;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand"><span class="mark"></span> Shelfscope</div>
+  <div class="nav-links">
+    <a href="#">Browse</a>
+    <a href="#">Collections</a>
+    <a href="#">About</a>
+  </div>
+</nav>
+
+<header>
+  <p class="eyebrow">Book discovery</p>
+  <h1>Find your next great read, faster.</h1>
+  <p class="sub">Search a growing catalog of titles by price, star rating, or a keyword from the title — Shelfscope narrows it down instantly.</p>
+  <div class="stats-row" id="statsRow">
+    <div class="stat"><span class="num">—</span><span class="label">titles in catalog</span></div>
+  </div>
+</header>
+
+<main>
+  <div class="search-panel">
+    <div class="search-row">
+      <input id="queryInput" type="text" placeholder="e.g. mystery books under £15, 4 star" autocomplete="off">
+      <button id="searchBtn" onclick="runSearch()">Search</button>
+    </div>
+    <div class="examples">
+      <span class="label">Try:</span>
+      <span class="chip" onclick="setQuery('under £15')">under £15</span>
+      <span class="chip" onclick="setQuery('5 star')">5 star</span>
+      <span class="chip" onclick="setQuery('love')">love</span>
+      <span class="chip" onclick="setQuery('over £40')">over £40</span>
+      <span class="chip" onclick="setQuery('mystery 4 star')">mystery 4 star</span>
+    </div>
+  </div>
+
+  <div class="results-header">
+    <span id="resultsLabel">Showing a sample of the catalog</span>
+  </div>
+
+  <div id="emptyNote" class="empty-note" style="display:none;">No titles matched that search. Try a broader query.</div>
+  <div class="catalog" id="catalog"></div>
+</main>
+
+<footer>
+  <div class="foot-brand">Shelfscope</div>
+  <div class="foot-links">
+    <a href="#">About</a>
+    <a href="#">Privacy</a>
+    <a href="#">Contact</a>
+  </div>
+  <div class="copyright">&copy; 2026 Shelfscope. All rights reserved.</div>
+</footer>
+
+<script>
+async function loadStats() {
+  const res = await fetch('/api/stats');
+  const data = await res.json();
+  document.getElementById('statsRow').innerHTML = `
+    <div class="stat"><span class="num">${data.total_books}</span><span class="label">titles in catalog</span></div>
+    <div class="stat"><span class="num">£${data.avg_price}</span><span class="label">average price</span></div>
+    <div class="stat"><span class="num">£${data.min_price}–£${data.max_price}</span><span class="label">price range</span></div>
+  `;
+}
+
+function setQuery(text) {
+  document.getElementById('queryInput').value = text;
+  runSearch();
+}
+
+function renderBooks(books) {
+  const catalog = document.getElementById('catalog');
+  const emptyNote = document.getElementById('emptyNote');
+  catalog.innerHTML = '';
+  if (books.length === 0) {
+    emptyNote.style.display = 'block';
+    return;
+  }
+  emptyNote.style.display = 'none';
+
+  books.forEach(book => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <img class="thumb" src="${book.image}" alt="">
+      <p class="title">${book.title}</p>
+      <div class="meta">
+        <span class="price">£${Number(book.price_gbp).toFixed(2)}</span>
+        <span class="rating">${'★'.repeat(book.rating_out_of_5)}${'☆'.repeat(5 - book.rating_out_of_5)}</span>
+      </div>
+      <div class="stock">${book.availability}</div>
+    `;
+    catalog.appendChild(card);
+  });
+}
+
+async function runSearch() {
+  const query = document.getElementById('queryInput').value.trim();
+  const label = document.getElementById('resultsLabel');
+  label.textContent = 'Searching...';
+
+  const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+  const data = await res.json();
+
+  renderBooks(data.results);
+
+  if (!query) {
+    label.textContent = 'Showing a sample of the catalog';
+  } else {
+    label.innerHTML = `<b>${data.count}</b> result${data.count === 1 ? '' : 's'} for "${query}"`;
+  }
+}
+
+loadStats();
+runSearch();
+</script>
+
+</body>
+</html>
